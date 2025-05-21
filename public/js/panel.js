@@ -116,7 +116,7 @@ async function handleSettings(event) {
         hideContextMenu();
         if (!res || !res.success) {
           return ShowError(
-            res.error ?? "Ha ocurrido un error al crear el usuario"
+            res.error.error ?? res.error ?? "Hubo un error en la creación del usuario"
           );
         }
 
@@ -591,4 +591,4 @@ function hideContextMenu() {
 }
 
 //////////////////////// Cuerpo
-document.querySelector(".Clase1").click();
+// document.querySelector(".Clase1").click();
