@@ -67,4 +67,36 @@ export class ClassesMySQL {
       con.end();
     }
   }
+
+  static async updateHost(ip, blocked) {
+    const con = await createDBConnection();
+
+    try {
+      const [update] = con.execute(
+        "UPDATE hosts SET blocked = ? WHERE ip = ?",
+        [blocked, ip]
+      );
+
+      return { success: true };
+    } catch (e) {
+      return { success: false };
+    } finally {
+      con.end();
+    }
+  }
+
+  static async deleteHost(ip) {
+    const con = await createDBConnection();
+
+    try {
+      await con.execute("DELETE FROM hosts WHERE ip = ?", [ip]);
+
+      return { success: true };
+    } catch (e) {
+      console.log(e);
+      return { success: false };
+    } finally {
+      con.end();
+    }
+  }
 }

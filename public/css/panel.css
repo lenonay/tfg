@@ -19,6 +19,10 @@
   /* Sombras */
   --shadow-b: #00000030;
   --shadow-p: #a87d5630;
+  /* Codes */
+  --c0: #799231;
+  --c1: #b01e1e;
+  --c2: #f2ac2b;
 }
 
 @font-face {
@@ -72,6 +76,7 @@ body {
 
 .logo {
   grid-area: logo;
+
   & img {
     width: 100%;
   }
@@ -80,32 +85,38 @@ body {
 menu {
   grid-area: menu;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  padding: 10px 20px;
 
-  & button {
-    width: 50px;
-    aspect-ratio: 1;
+  & .clases {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 
-    &.selected {
-      color: var(--primary-shade-20);
-      filter: drop-shadow(0 0 5px var(--primary-tint-40));
+    & button {
+      font-size: 22px;
+      font-weight: 600;
+      background: var(--primary-shade-20);
+      padding: 8px 10px;
+      border-radius: 15px;
+
+      &:hover {
+        box-shadow: 0 0 10px 5px var(--shadow-b);
+        background: var(--text-on-primary-acc);
+      }
     }
   }
 
   & .account {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 10px;
     border-radius: 15px;
     gap: 5px;
 
     & .logout_btn {
-      padding-right: 8px;
-
       &:hover {
         filter: drop-shadow(0 0 5px var(--secondary));
         color: var(--secondary);
@@ -116,157 +127,93 @@ menu {
 
 main {
   grid-area: main;
-}
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-/* Vistas */
-main.users {
-  display: grid;
-  grid-template-rows: 60px 1fr;
-  gap: 10px;
+  &.viewer {
+    display: grid;
+    grid-template-rows: 80px 1fr 50px;
+    grid-template-columns: 1fr;
+    padding: 15px;
 
-  & .upper_menu {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 15px;
-    background: var(--primary-tint-40);
-    border-radius: 15px;
-    padding: 0 10px;
-
-    & .search_bar {
-      flex: 1;
+    & .action_bar {
+      width: 100%;
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
-      gap: 5px;
+      background: var(--primary-tint-40);
+      padding: 15px;
+      border-radius: 10px;
 
-      & > input {
-        background: var(--bg);
-        padding: 5px 10px;
-        border-radius: 8px 8px 2px 2px;
-        border: none;
-        border-bottom: 1.5px solid var(--primary);
-        caret-color: var(--primary);
-        outline: none;
-        transition: all 300ms ease;
-        font-size: 16px;
+      & .buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
 
-        &.error {
-          caret-color: var(--alert);
-          border-bottom: 1.8px solid var(--alert);
-          color: var(--alert);
+        & button {
+          font-size: 18px;
+          font-weight: 600;
+          padding: 8px 12px;
+          background: var(--secondary);
+          box-shadow: 0 0 5px 1px var(--shadow-b);
+          border-radius: 10px;
+          cursor: pointer;
+
+          &:hover {
+            background: var(--secondary-strong);
+          }
         }
       }
     }
-  }
 
-  & .viewer {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-    overflow: auto;
-    overflow-x: hidden;
+    & .hosts_grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: minmax(100px, auto);
+      gap: 20px;
+      height: 100%;
 
-    &.loading {
-      justify-content: center;
+      & .host {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+        cursor: pointer;
+
+        &.code0 > svg {
+          color: var(--c0);
+        }
+        &.code1 > svg {
+          color: var(--c1);
+        }
+        &.code2 > svg {
+          color: var(--c2);
+        }
+      }
     }
 
-    & .dept_container {
-      width: 100%;
+    & .map_legend {
       display: flex;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
-      padding: 8px;
-      background: var(--primary-tint-40);
-      border-radius: 10px;
-      box-shadow: 0 0 10px 1px var(--shadow-b);
 
-      & table {
-        width: 100%;
-        text-align: center;
-        padding: 5px;
-        border-collapse: collapse;
+      & > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
 
-        & > * {
-          transition: all 300ms ease;
+        &.code0 > svg {
+          color: var(--c0);
         }
-
-        & th,
-        td {
-          padding: 2px 5px;
-
-          &[actions] {
-            text-align: right;
-          }
+        &.code1 > svg {
+          color: var(--c1);
         }
-
-        & thead {
-          font-size: 18px;
-          text-transform: uppercase;
-          cursor: pointer;
-
-          & tr:first-of-type > th {
-            text-shadow: 0 0 5px var(--shadow-p);
-          }
-
-          & .column_headers {
-            font-size: 16px;
-
-            &.hidden {
-              display: none;
-            }
-          }
-        }
-
-        & tbody {
-          overflow: hidden;
-          &.hidden {
-            opacity: 0;
-            height: 0px;
-            display: none;
-          }
-
-          & tr[d_active="false"] {
-            color: var(--shadow-b);
-          }
-
-          & .user_info {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 2px;
-
-            & svg {
-              color: var(--secondary-strong);
-
-              &.duke {
-                color: #813d9c;;
-              }
-            }
-          }
-
-          & tr:nth-child(odd) {
-            background: var(--shadow-p);
-          }
-
-          & .buttons_element {
-            text-align: right;
-          }
-
-          & .action_buttons {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 10px;
-
-            & button:hover {
-              color: var(--primary-shade-20);
-              filter: drop-shadow(0 0 10px var(--shadow-p));
-            }
-          }
+        &.code2 > svg {
+          color: var(--c2);
         }
       }
     }
@@ -293,136 +240,6 @@ main.users {
   z-index: 10;
   background-color: var(--shadow-b);
   cursor: pointer;
-}
-
-.display {
-  z-index: 11;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  background: var(--primary-tint-40);
-  box-shadow: 0 0 5px 1px var(--shadow-p);
-  padding: 15px;
-  border-radius: 20px;
-
-  & .create_user_form {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    grid-template-areas:
-      "username surname birthdate"
-      "email passwd dept"
-      "desc desc desc"
-      "buttons buttons buttons";
-    gap: 10px;
-    column-gap: 15px;
-    min-width: 600px;
-    min-height: 150px;
-
-    & > label {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-
-      & > span {
-        padding: 0 5px;
-      }
-
-      & > input,
-      & > textarea,
-      & > select {
-        background: var(--bg);
-        padding: 5px 10px;
-        border-radius: 8px 8px 2px 2px;
-        border: none;
-        border-bottom: 1.5px solid var(--primary);
-        caret-color: var(--primary);
-        outline: none;
-        transition: all 300ms ease;
-        font-size: 16px;
-        resize: none;
-
-        &.error_inp {
-          caret-color: var(--alert);
-          border-bottom: 1.8px solid var(--alert);
-          color: var(--alert);
-        }
-      }
-    }
-
-    & .buttons {
-      grid-area: buttons;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-
-      & > label {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        & > input[type="checkbox"] {
-          accent-color: var(--primary-shade-20);
-        }
-      }
-
-      & > button {
-        padding: 8px 12px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px 1px var(--shadow-b);
-        font-weight: 600;
-        font-size: 16px;
-      }
-
-      & .submit_btn {
-        background: var(--primary-shade-20);
-      }
-
-      & .cancel_btn {
-        background: var(--neutral-200);
-      }
-    }
-
-    & .username {
-      grid-area: username;
-    }
-
-    & .surname {
-      grid-area: surname;
-    }
-
-    & .department {
-      grid-area: dept;
-    }
-
-    & .email {
-      grid-area: email;
-    }
-
-    & .passwd {
-      grid-area: passwd;
-    }
-
-    & .description {
-      grid-area: desc;
-    }
-  }
-
-  & .error_display {
-    font-style: italic;
-    text-align: center;
-    color: var(--alert);
-    opacity: 0;
-    transition: all 300ms ease;
-
-    &.active {
-      opacity: 1;
-    }
-  }
 }
 
 .alert {
@@ -514,6 +331,7 @@ main.users {
   aspect-ratio: 1;
   display: grid;
 }
+
 .loader::before,
 .loader::after {
   content: "";
@@ -525,6 +343,7 @@ main.users {
   background-size: 12px 12px;
   animation: l12 1s infinite;
 }
+
 .loader::before {
   margin: 4px;
   filter: hue-rotate(45deg);
@@ -536,4 +355,45 @@ main.users {
   100% {
     transform: rotate(0.5turn);
   }
+}
+
+/* Overlay transparente para capturar clicks y oscurecer ligeramente */
+.back.radial-back {
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 20;
+}
+
+/* Contenedor del menú en columna (context-menu) */
+.context-menu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--primary-acc);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px var(--shadow-b);
+  padding: 5px 0;
+  z-index: 21;
+  max-width: 200px;
+  height: fit-content;
+}
+
+/* Cada botón del menú */
+.context-menu .ctx-btn {
+  background: none;
+  border: none;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 200ms;
+
+  &.warning:hover {
+    color: var(--alert);
+    font-weight: 600;
+  }
+}
+
+.context-menu .ctx-btn:hover {
+  background: var(--primary-tint-40);
 }
