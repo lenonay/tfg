@@ -54,4 +54,10 @@ export class AccountController {
       // Enviamos un success
       .send({ success: true });
   }
+
+  static logout(req, res) {
+    res
+      .clearCookie('token') // Boramos la cookie
+      .send()
+  }
 }

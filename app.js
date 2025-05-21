@@ -5,6 +5,7 @@ import { INT, PORT } from "./config.js";
 import { session } from "./middlewares/session.js";
 import { AccountRouter } from "./routes/AccountRouter.js";
 import { panelRouter } from "./routes/panelRouter.js";
+import { HostsRouter } from "./routes/HostsRouter.js";
 
 const app = e();
 
@@ -34,6 +35,8 @@ app.get("/", (req, res) => {
 app.use("/panel", panelRouter)
 
 app.use("/account", AccountRouter);
+
+app.use("/hosts", HostsRouter);
 
 app.listen(PORT, INT, () => {
   console.log("Server listening on:", INT, PORT);
