@@ -36,4 +36,78 @@ export class AccountMySQL {
       con.end();
     }
   }
+
+  static async getAll() {
+    const con = await createDBConnection();
+
+    try {
+      const [rows] = await con.query("SELECT id, username FROM users");
+
+      const users = rows.map((row) => {
+        return { ...row, id: UUIDParser.binToUUID(row.id) };
+      });
+
+      return { success: true, users };
+    } catch (e) {
+      console.log(e);
+
+      return { success: false, error: "Hubo un error al procesar los datos" };
+    } finally {
+      con.end();
+    }
+  }
+
+  static async create(id, username, passwd) {
+    const con = await createDBConnection();
+
+    try {
+      const [result] = await con.execute("INSERT INTO users VALUES (?,?,?)", [
+        UUIDParser.UUIDToBin(id),
+        username,
+        passwd,
+      ]);
+
+      return { success: true };
+    } catch (error) {
+      console.log(error);
+      return { success: false, error: "Hubo un error al crear el usuario" };
+    } finally {
+      con.end();
+    }
+  }
+
+  static async lastUser() {
+    const con = await createDBConnection();
+
+    try {
+      const [rows] = await con.query("SELECT id FROM users");
+
+      const last = rows.length == 1;
+
+      return { success: true, last };
+    } catch (e) {
+      return {
+        success: false,
+        error: "Hubo un error durante el proceso de los datos",
+      };
+    } finally {
+    }
+  }
+
+  static async delete(id) {
+    const con = await createDBConnection();
+
+    try {
+      await con.execute("DELETE FROM users WHERE id = ?", [
+        UUIDParser.UUIDToBin(id),
+      ]);
+
+      return { success: true };
+    } catch (e) {
+      console.log(e);
+      return { success: false, error: "Hubo un error al borar al usuario" };
+    } finally {
+      con.end();
+    }
+  }
 }

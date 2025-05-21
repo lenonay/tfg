@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import crypto from "node:crypto";
 
 import { SALT } from "../config.js";
 
@@ -49,7 +50,7 @@ export class AccountController {
       .cookie("token", token, {
         maxAge: 1000 * 60 * 60 * 6,
         httpOnly: true,
-        path: "/"
+        path: "/",
       })
       // Enviamos un success
       .send({ success: true });
@@ -57,7 +58,58 @@ export class AccountController {
 
   static logout(req, res) {
     res
-      .clearCookie('token') // Boramos la cookie
-      .send()
+      .clearCookie("token") // Boramos la cookie
+      .send();
+  }
+
+  static async create(req, res) {
+    const validate = UserValidator.login(req.body);
+
+    if (!validate.success) {
+      return res.json(validate);
+    }
+
+    // 2. Revisamos que no exista ya
+    const exists = await AccountMySQL.checkUser(validate.data);
+
+    if (exists.success) {
+      return res.json({ success: false, error: "Ese usuario ya existe" });
+    }
+
+    const dbResult = await AccountMySQL.create(
+      crypto.randomUUID(),
+      validate.data.username,
+      bcrypt.hashSync(validate.data.passwd, Number(SALT))
+    );
+
+    res.json(dbResult);
+  }
+
+  static async delete(req, res) {
+    const { id } = req.params;
+
+    const lastUser = await AccountMySQL.lastUser();
+
+    if (!lastUser.success) {
+      return res.json(lastUser);
+    }
+
+    if (lastUser.last) {
+      return res.json({
+        success: false,
+        error: "No se puede eliminar el último usuario",
+      });
+    }
+
+    const dbResult = await AccountMySQL.delete(id); 
+
+    res.json(dbResult);
+  }
+
+  static async getAll(req, res) {
+    // Recuperamos todos los usuarios
+    const dbResult = await AccountMySQL.getAll();
+
+    res.json(dbResult);
   }
 }
